@@ -1,0 +1,31 @@
+{
+  "name" : "pushoperations/magic-repository",
+  "type" : "library",
+  "description" : "A library of decorators.",
+  "homepage" : "https://github.com/pushoperations/MagicRepository",
+  "license" : "MIT",
+  "authors": [
+    {
+      "name": "Tony Li",
+      "homepage": "http://tonyli.ca"
+    }
+  ],
+  "keywords": [
+    "repository", "pattern", "magic finders"
+  ],
+  "require" : {
+    "php" : ">=5.4.0",
+    "illuminate/cache": "4.2.*"
+  },
+  "require-dev": {
+    "sami/sami": "2.0.*",
+    "phpunit/phpunit": "4.3.*",
+    "satooshi/php-coveralls": "dev-master"
+  },
+  "autoload" : {
+    "psr-4" : {
+      "Push\\MagicRepository\\": "src/",
+      "Push\\MagicRepository\\Tests\\": "tests/"
+    }
+  }
+}
