@@ -1,8 +1,8 @@
 {
-  "name" : "pushoperations/magic-repository",
+  "name" : "pushoperations/magician",
   "type" : "library",
-  "description" : "A library of decorators.",
-  "homepage" : "https://github.com/pushoperations/MagicRepository",
+  "description" : "A library for implementing repositories with magic finders for the Eloquent ORM.",
+  "homepage" : "https://github.com/pushoperations/Magician",
   "license" : "MIT",
   "authors": [
     {
@@ -11,10 +11,11 @@
     }
   ],
   "keywords": [
-    "repository", "pattern", "magic finders"
+    "magician", "laravel", "repository", "repositories", "pattern", "magic finders"
   ],
   "require" : {
     "php" : ">=5.4.0",
+    "illuminate/support": "4.2.*",
     "illuminate/cache": "4.2.*"
   },
   "require-dev": {
@@ -24,8 +25,8 @@
   },
   "autoload" : {
     "psr-4" : {
-      "Push\\MagicRepository\\": "src/",
-      "Push\\MagicRepository\\Tests\\": "tests/"
+      "Magician\\": "src/",
+      "Magician\\Tests\\": "tests/"
     }
   }
 }
