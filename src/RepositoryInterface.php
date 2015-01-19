@@ -19,27 +19,28 @@ interface RepositoryInterface
     public function firstOrMake(array $attributes = []);
 
     /**
+     * Magic method for handling the construction of dynamic search functions.
+     *
      * Query for the first (find) or all (get) instances.
      *
-     * @param  array|integer $options The qualifier or an array of the equality and the qualifier
-     * @param  array|null    $order   The column to order by
-     * @param  array|null    $columns The columns to retrieve
-     * @return mixed|null
+     * Parameters
+     *
+     *     array|integer $value   The qualifier or an array of the equality and the qualifier
+     *     array|null    $order   The column to order by
+     *     array|null    $columns The columns to retrieve
+     *
+     * Return Value
+     *
+     *     mixed|null             The results of the query
      *
      * Example of possible methods:
      *
-     * findLatestBy*($value, array $order = null, array $columns = null);
-     * findOldestBy*($value, array $order = null, array $columns = null);
-     * getLatest#By*($value, array $order = null, array $columns = null);
-     * getOldest#By*($value, array $order = null, array $columns = null);
-     */
-
-    /**
-     * Magic Method for handling dynamic functions.
+     *     findLatestBy*($value, array $order = null, array $columns = null);
+     *     findOldestBy*($value, array $order = null, array $columns = null);
+     *     getLatest#By*($value, array $order = null, array $columns = null);
+     *     getOldest#By*($value, array $order = null, array $columns = null);
      *
-     * Handle the construction of dynamic where clauses
-     *
-     * @param string $method     The method that was called
+     * @param string $method     The name of the method called
      * @param array  $parameters The parameters passed to the method
      */
     public function __call($method, $parameters);
@@ -63,17 +64,15 @@ interface RepositoryInterface
     /**
      * Delete (via finding) an instance.
      *
-     * @param  mixed|array|integer $ids The model/an array of ids/an id to delete
-     * @return integer|boolean          The number of instances deleted or true if the specified instance was deleted
+     * @param  array|integer|mixed $options The model/an array of ids/an id to delete
+     * @return integer|boolean              The number of instances deleted or true if the specified instance was deleted
      */
     public function delete($options);
 
     /**
-     * Associate multiple instances to an object and save into the database.
+     * Iterates through the relations, associates each object with the model, and save them into the database.
      *
-     * Iterates through the relations and associates each object with the model
-     *
-     * @param  mied    $model     The model object to associate
+     * @param  mixed   $model     The model object to associate
      * @param  array   $relations The instances to be associated
      * @return boolean            True if the model is successfully persisted into the database
      */
@@ -81,13 +80,12 @@ interface RepositoryInterface
 
     /**
      * Cache buster.
-     *
-     * Called after the data store is mutated to clear all cached queries results of this repository
-     * Always bust untagged caches if a repository is untagged
-     * Call this function when manually inserting
+     * Called after the data store is mutated to clear all cached queries results of this repository.
+     * Always bust untagged caches if a repository is untagged.
+     * Call this function when manually inserting.
      *
      * @param  string|null $key Key to reference cache
-     * @return void
+     * @return boolean           True
      */
     public function cacheBust($key = null);
 }

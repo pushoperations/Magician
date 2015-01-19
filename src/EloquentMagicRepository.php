@@ -4,10 +4,25 @@ use Cache;
 
 abstract class EloquentMagicRepository implements RepositoryInterface
 {
+    /**
+     * The cache tag for repositories without a tag.
+     *
+     * @var string
+     */
     private $untagged = 'untagged-repositories';
 
+    /**
+     * The cache tag for this repository.
+     *
+     * @var string
+     */
     protected $cacheTag = null;
 
+    /**
+     * Number of minutes to cache the query results.
+     *
+     * @var integer
+     */
     protected $cacheDuration = 60;
 
     /**
@@ -33,9 +48,26 @@ abstract class EloquentMagicRepository implements RepositoryInterface
     }
 
     /**
-     * Magic Method for handling dynamic functions.
+     * Magic method for handling the construction of dynamic search functions.
      *
-     * Handle the construction of dynamic where clauses
+     * Query for the first (find) or all (get) instances.
+     *
+     * Parameters
+     *
+     *     array|integer $value   The qualifier or an array of the equality and the qualifier
+     *     array|null    $order   The column to order by
+     *     array|null    $columns The columns to retrieve
+     *
+     * Return Value
+     *
+     *     mixed|null             The results of the query
+     *
+     * Example of possible methods:
+     *
+     *     findLatestBy*($value, array $order = null, array $columns = null);
+     *     findOldestBy*($value, array $order = null, array $columns = null);
+     *     getLatest#By*($value, array $order = null, array $columns = null);
+     *     getOldest#By*($value, array $order = null, array $columns = null);
      *
      * @param string $method     The name of the method called
      * @param array  $parameters The parameters passed to the method
@@ -94,9 +126,7 @@ abstract class EloquentMagicRepository implements RepositoryInterface
     }
 
     /**
-     * Associate multiple instances to an object and save into the database.
-     *
-     * Iterates through the relations and associates each object with the model
+     * Iterates through the relations, associates each object with the model, and save them into the database.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model The model object to associate
      * @param  array   $relations The instances to be associated
@@ -117,10 +147,9 @@ abstract class EloquentMagicRepository implements RepositoryInterface
 
     /**
      * Cache buster.
-     *
-     * Called after the data store is mutated to clear all cached queries results of this repository
-     * Always bust untagged caches if a repository is untagged
-     * Call this function when manually inserting
+     * Called after the data store is mutated to clear all cached queries results of this repository.
+     * Always bust untagged caches if a repository is untagged.
+     * Call this function when manually inserting.
      *
      * @param  string|null  $key Key to reference cache
      * @return boolean           True
@@ -138,8 +167,7 @@ abstract class EloquentMagicRepository implements RepositoryInterface
 
     /**
      * Query execution function called by getters.
-     *
-     * All repository getters should call this for integrated caching at the repository level
+     * All repository getters should call this for integrated caching at the repository level.
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @param  array       $columns The columns to retrieve
@@ -169,9 +197,9 @@ abstract class EloquentMagicRepository implements RepositoryInterface
     }
 
     /**
+     * NOTE: Deprecated
      * Parse options for a query object.
-     *
-     * Attach parameters passed as a nested array to a query
+     * Attach parameters passed as a nested array to a query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @param  array $options Query option nested by column-value pairs ['=' => ['key' => 'value']];
@@ -203,8 +231,7 @@ abstract class EloquentMagicRepository implements RepositoryInterface
 
     /**
      * Magic finder resolution.
-     *
-     * Dynamic queries are caught by the __call magic method and parsed here
+     * Dynamic queries are caught by the __call magic method and parsed here.
      *
      * @param  string $term       The specific type of getter
      * @param  string $method     The name of the method called
