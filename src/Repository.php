@@ -1,8 +1,8 @@
-<?php namespace Push\MagicRepository;
+<?php namespace Magician;
 
 use Cache;
 
-abstract class EloquentMagicRepository implements RepositoryInterface
+abstract class Repository implements RepositoryInterface
 {
     /**
      * The cache tag for repositories without a tag.
@@ -194,39 +194,6 @@ abstract class EloquentMagicRepository implements RepositoryInterface
     protected function getQueryBuilder()
     {
         return $this->model->newQuery();
-    }
-
-    /**
-     * NOTE: Deprecated
-     * Parse options for a query object.
-     * Attach parameters passed as a nested array to a query.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  array $options Query option nested by column-value pairs ['=' => ['key' => 'value']];
-     * @param  array $order   ['key' => 'direction'];
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    protected function parseOptions($query, array $where = [], array $order = [])
-    {
-        $whereScope = ['=', '>', '<', '>=', '<='];
-        $orderScope = ['asc', 'desc'];
-
-        foreach ($where as $option => $values) {
-            if (in_array($option, $whereScope)) {
-                foreach ($values as $key => $value) {
-                    // TODO: make sure multiple wheres work
-                    $query->where($key, $option, $value);
-                }
-            }
-        }
-
-        foreach ($order as $field => $value) {
-            if (in_array(strtolower($value, $orderScope))) {
-                $query->orderBy($field, $value);
-            }
-        }
-
-        return $query;
     }
 
     /**
