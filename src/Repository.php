@@ -114,10 +114,8 @@ abstract class Repository implements RepositoryInterface
      */
     public function delete($ids)
     {
-        if (is_array($ids)) {
+        if (is_array($ids) || is_int($ids)) {
             $success = $this->model->destroy($ids);
-        } elseif (is_int($ids)) {
-            $success = $query->find($ids)->delete();
         } else {
             $success = $ids->delete();
         }
