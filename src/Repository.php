@@ -146,6 +146,21 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
+     * Count the number of instances.
+     *
+     * @return int The number of the model stored in the database
+     */
+    public function count()
+    {
+        $tag = $this->cacheTag ?: $this->untagged;
+
+        return $this->getQueryBuilder()
+            ->cacheTags(['repositories', 'count', $tag])
+            ->remember($this->cacheDuration)
+            ->count();
+    }
+
+    /**
      * Cache buster.
      * Called after the data store is mutated to clear all cached queries results of this repository.
      * Always bust untagged caches if a repository is untagged.
