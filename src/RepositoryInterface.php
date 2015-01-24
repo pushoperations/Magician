@@ -79,6 +79,13 @@ interface RepositoryInterface
     public function relate($model, $relations = []);
 
     /**
+     * Count the number of instances.
+     *
+     * @return int The number of the model stored in the database
+     */
+    public function count();
+
+    /**
      * Cache buster.
      * Called after the data store is mutated to clear all cached queries results of this repository.
      * Always bust untagged caches if a repository is untagged.
