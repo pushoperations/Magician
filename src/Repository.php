@@ -107,14 +107,14 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
-     * Persist an instance.
+     * Persist an instance and it's related models.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model The model to persist
      * @return boolean True if the instance is successfully persisted into the database
      */
     public function save($model)
     {
-        return $model->save() && $this->cacheBust();
+        return $model->push() && $this->cacheBust();
     }
 
     /**
@@ -146,23 +146,25 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
-     * Iterates through the relations, associates each object with the model, and save them into the database.
+     * Iterates through the relations and associates each object with the model.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model The model object to associate
-     * @param  array   $relations The instances to be associated
-     * @return boolean            True if the model is successfully persisted into the database
+     * @param  array $relationships The instances or ids to be associated
+     * @param  \Illuminate\Database\Eloquent\Model $model The model object itself
      */
-    public function relate($model, $relations = [])
+    public function relate($model, $relationships)
     {
-        foreach ($relations as $relate => $object) {
-            if (isset($object)) {
-                $model->$relate()->associate($object);
+        foreach ($relationships as $relation => $model) {
+            if (is_int($model)) {
+                // An id and corresponding key is passed
+                $model->$relation = $model;
+            } elseif (isset($model)) {
+                // An object is passed
+                $model->$relation()->associate($model);
             }
         }
 
-        $model->push();
-
-        return $model->save() && $this->cacheBust();
+        return $model;
     }
 
     /**
