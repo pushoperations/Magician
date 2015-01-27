@@ -46,6 +46,16 @@ interface RepositoryInterface
     public function __call($method, $parameters);
 
     /**
+     * Query for all instances.
+     *
+     * @param  string     $method  The name of the method called
+     * @param  array|null $order   The column to order by
+     * @param  array|null $columns The columns to retrieve
+     * @return mixed|null          The results of the query
+     */
+    public function getAll(array $order = null, array $columns = null);
+
+    /**
      * Persist an instance.
      *
      * @param  mixed   $model The model to persist

@@ -85,6 +85,31 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
+     * Query for all instances.
+     *
+     * @param  string     $method  The name of the method called
+     * @param  array|null $order   The column to order by
+     * @param  array|null $columns The columns to retrieve
+     * @return \Illuminate\Support\Collection|null
+     */
+    public function getAll(array $order = null, array $columns = null)
+    {
+        $query = $this->getQueryBuilder();
+
+        if ($order) {
+            $orderKey = array_shift($order) ?: null;
+            $orderDir = array_shift($order) ?: null;
+            $query->orderBy($orderKey, $orderDir);
+        }
+
+        if ($columns) {
+            $query->select($columns);
+        }
+
+        return $this->executeQuery($query, false);
+    }
+
+    /**
      * Persist an instance.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model The model to persist
