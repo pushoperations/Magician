@@ -46,6 +46,16 @@ interface RepositoryInterface
     public function __call($method, $parameters);
 
     /**
+     * Query for all instances.
+     *
+     * @param  string     $method  The name of the method called
+     * @param  array|null $order   The column to order by
+     * @param  array|null $columns The columns to retrieve
+     * @return mixed|null          The results of the query
+     */
+    public function getAll(array $order = null, array $columns = null);
+
+    /**
      * Persist an instance.
      *
      * @param  mixed   $model The model to persist
@@ -95,4 +105,19 @@ interface RepositoryInterface
      * @return boolean           True
      */
     public function cacheBust($key = null);
+
+    /**
+     * Return a new query instance.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQueryBuilder();
+
+    /**
+     * Return a new parser instance.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query A query
+     * @return \Magician\Utils\Parser
+     */
+    public function getParser($query);
 }
