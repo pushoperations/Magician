@@ -1,4 +1,4 @@
-<?php require __DIR__ . '/vendor/autoload.php';
+<?php require __DIR__.'/vendor/autoload.php';
 
 use Sami\Sami;
 use Sami\Version\GitVersionCollection;
@@ -7,7 +7,7 @@ use Symfony\Component\Finder\Finder;
 $iterator = Finder::create()
     ->files()
     ->name('*.php')
-    ->in($dir = __DIR__ . '/src');
+    ->in($dir = __DIR__.'/src');
 
 $versions = GitVersionCollection::create($dir)
     ->add('master', 'master branch')
@@ -16,8 +16,8 @@ $versions = GitVersionCollection::create($dir)
 $options = array(
     'versions'             => $versions,
     'title'                => 'Magician API',
-    'build_dir'            => __DIR__ . '/build/docs/%version%',
-    'cache_dir'            => __DIR__ . '/build/cache/docs/%version%',
+    'build_dir'            => __DIR__.'/build/docs/%version%',
+    'cache_dir'            => __DIR__.'/build/cache/docs/%version%',
     'default_opened_level' => 2,
 );
 
