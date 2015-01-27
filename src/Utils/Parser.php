@@ -31,10 +31,10 @@ class Parser
     }
 
     /**
-     * Add a where clause to a query.
+     * Add a where clause to the query.
      *
      * @param  string $string The where statement to parse
-     * @return \Illuminate\Database\Eloquent\Builder        The query
+     * @return Parser         The parser instance itself
      */
     public function where($string)
     {
@@ -42,7 +42,7 @@ class Parser
 
         if (count($data) == 2) {
             $this->query->where($data[0], $data[1]);
-        } else {
+        } elseif (count($data) == 3) {
             $this->query->where($data[0], $data[1], $data[2]);
         }
 
@@ -50,12 +50,12 @@ class Parser
     }
 
     /**
-     * Add ordering to a query.
+     * Add ordering to the query.
      *
      * @param  array|null $order The column to order by
-     * @return \Illuminate\Database\Eloquent\Builder        The query
+     * @return Parser            The parser instance itself
      */
-    public function order(array $order)
+    public function order(array $order = null)
     {
         if ($order) {
             $orderKey = array_shift($order) ?: null;
@@ -68,6 +68,13 @@ class Parser
 
     // Magic finder parsing
 
+    /**
+     * Add the qualifying where statement to the query.
+     *
+     * @param  string       $finder The column to look in
+     * @param  array|string $finder The comparison equality
+     * @return Parser               The parser instance itself
+     */
     public function qualify($finder, $qualifier)
     {
         if (is_array($qualifier)) {
@@ -82,7 +89,13 @@ class Parser
         return $this;
     }
 
-    public function direction($direction)
+    /**
+     * Set the direction of the query.
+     *
+     * @param  string|null $direction The date direction to order by
+     * @return Parser                 The parser instance itself
+     */
+    public function direction($direction = null)
     {
         if ($direction == 'Latest') {
             $this->query->orderBy('created_at', 'desc');
