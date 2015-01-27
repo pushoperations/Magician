@@ -1,5 +1,6 @@
 <?php namespace Magician;
 
+use Magician\Utils\Parser;
 use Cache;
 
 abstract class Repository implements RepositoryInterface
@@ -95,12 +96,8 @@ abstract class Repository implements RepositoryInterface
     public function getAll(array $order = null, array $columns = null)
     {
         $query = $this->getQueryBuilder();
-
-        if ($order) {
-            $orderKey = array_shift($order) ?: null;
-            $orderDir = array_shift($order) ?: null;
-            $query->orderBy($orderKey, $orderDir);
-        }
+        $parser = $this->getParser();
+        $query = $parser->order($query, $order);
 
         if ($columns) {
             $query->select($columns);
@@ -204,6 +201,27 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
+     * Return a new query instance.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQueryBuilder()
+    {
+        return $this->model->newQuery();
+    }
+
+    /**
+     * Return a new parser instance.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query A query
+     * @return \Magician\Utils\Parser
+     */
+    public function getParser($query)
+    {
+        return new Parser($query);
+    }
+
+    /**
      * Query execution function called by getters.
      * All repository getters should call this for integrated caching at the repository level.
      *
@@ -222,16 +240,6 @@ abstract class Repository implements RepositoryInterface
             return $query->cacheTags(['repositories', $tag])->remember($this->cacheDuration)->get();
         }
 
-    }
-
-    /**
-     * Return a new query instance.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    protected function getQueryBuilder()
-    {
-        return $this->model->newQuery();
     }
 
     /**
@@ -257,11 +265,6 @@ abstract class Repository implements RepositoryInterface
 
         if (!$qualifier) {
             return null;
-        } elseif (is_array($qualifier)) {
-            $equality = array_shift($qualifier);
-            $qualifier = array_shift($qualifier);
-        } else {
-            $equality = '=';
         }
 
         // The order to list results
@@ -271,20 +274,15 @@ abstract class Repository implements RepositoryInterface
         $columns = isset($parameters[2]) ? $parameters[2] : ['*'];
 
         $query = $this->getQueryBuilder();
-        $query->where($finder, $equality, $qualifier);
+        $parser = $this->getParser($query);
+
+        // Parse and build the query
+        $query = $parser->qualify($finder, $qualifier)
+            ->order($order)
+            ->direction($direction)
+            ->query();
+
         $query->select($columns);
-
-        if ($order) {
-            $orderKey = array_shift($order) ?: null;
-            $orderDir = array_shift($order) ?: null;
-            $query->orderBy($orderKey, $orderDir);
-        }
-
-        if ($direction == 'Latest') {
-            $query->orderBy('created_at', 'desc');
-        } elseif ($direction == 'Oldest') {
-            $query->orderBy('created_at', 'asc');
-        }
 
         if ($term != 'find' && $count) {
             $query->take($count);

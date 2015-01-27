@@ -105,4 +105,19 @@ interface RepositoryInterface
      * @return boolean           True
      */
     public function cacheBust($key = null);
+
+    /**
+     * Return a new query instance.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getQueryBuilder();
+
+    /**
+     * Return a new parser instance.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query A query
+     * @return \Magician\Utils\Parser
+     */
+    public function getParser($query);
 }
