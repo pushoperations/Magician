@@ -29,7 +29,7 @@ Update your project's composer.json file to include Magic Repository:
 ```json
 {
     "require": {
-        "pushoperations/magician": "0.9.*"
+        "pushoperations/magician": "1.*"
     }
 }
 ```
