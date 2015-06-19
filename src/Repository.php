@@ -22,14 +22,14 @@ abstract class Repository implements RepositoryInterface
     /**
      * Number of minutes to cache the query results.
      *
-     * @var integer
+     * @var int
      */
     protected $cacheDuration = 60;
 
     /**
      * Create a new instance.
      *
-     * @param  array $attributes Attributes to instantiate the model with
+     * @param  array                               $attributes Attributes to instantiate the model with
      * @return \Illuminate\Database\Eloquent\Model The model object
      */
     public function make(array $attributes = [])
@@ -40,7 +40,7 @@ abstract class Repository implements RepositoryInterface
     /**
      * Find an existing or create a new instance.
      *
-     * @param  array $attributes Attributes to query/instantiate the model with
+     * @param  array                               $attributes Attributes to query/instantiate the model with
      * @return \Illuminate\Database\Eloquent\Model The model object
      */
     public function firstOrMake(array $attributes = [])
@@ -88,9 +88,9 @@ abstract class Repository implements RepositoryInterface
     /**
      * Query for all instances.
      *
-     * @param  string     $method  The name of the method called
-     * @param  array|null $order   The column to order by
-     * @param  array|null $columns The columns to retrieve
+     * @param  string                              $method  The name of the method called
+     * @param  array|null                          $order   The column to order by
+     * @param  array|null                          $columns The columns to retrieve
      * @return \Illuminate\Support\Collection|null
      */
     public function getAll(array $order = null, array $columns = null)
@@ -110,7 +110,7 @@ abstract class Repository implements RepositoryInterface
      * Persist an instance.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model The model to persist
-     * @return boolean True if the instance is successfully persisted into the database
+     * @return bool                                True if the instance is successfully persisted into the database
      */
     public function save($model)
     {
@@ -120,8 +120,8 @@ abstract class Repository implements RepositoryInterface
     /**
      * Persist data.
      *
-     * @param  array   $fields The fields of a table to persist
-     * @return boolean         True if the data is successfully persisted into the database
+     * @param  array $fields The fields of a table to persist
+     * @return bool  True if the data is successfully persisted into the database
      */
     public function insert(array $fields)
     {
@@ -131,8 +131,8 @@ abstract class Repository implements RepositoryInterface
     /**
      * Delete (via finding) an instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|array|integer $ids The model/an array of ids/an id to delete
-     * @return integer|boolean The number of instances deleted or true if the specified instance was deleted
+     * @param  \Illuminate\Database\Eloquent\Model|array|int $ids The model/an array of ids/an id to delete
+     * @return int|bool                                      The number of instances deleted or true if the specified instance was deleted
      */
     public function delete($ids)
     {
@@ -148,9 +148,9 @@ abstract class Repository implements RepositoryInterface
     /**
      * Iterates through the relations, associates each object with the model, and save them into the database.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model The model object to associate
-     * @param  array   $relations The instances to be associated
-     * @return boolean            True if the model is successfully persisted into the database
+     * @param  \Illuminate\Database\Eloquent\Model $model     The model object to associate
+     * @param  array                               $relations The instances to be associated
+     * @return bool                                True if the model is successfully persisted into the database
      */
     public function relate($model, $relations = [])
     {
@@ -186,8 +186,8 @@ abstract class Repository implements RepositoryInterface
      * Always bust untagged caches if a repository is untagged.
      * Call this function when manually inserting.
      *
-     * @param  string|null  $key Key to reference cache
-     * @return boolean           True
+     * @param  string|null $key Key to reference cache
+     * @return bool        True
      */
     public function cacheBust($key = null)
     {
@@ -225,9 +225,9 @@ abstract class Repository implements RepositoryInterface
      * Query execution function called by getters.
      * All repository getters should call this for integrated caching at the repository level.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  array       $columns The columns to retrieve
-     * @param  boolean     $first   Limit to one result or not
+     * @param  \Illuminate\Database\Eloquent\Builder                                   $query
+     * @param  array                                                                   $columns The columns to retrieve
+     * @param  bool                                                                    $first   Limit to one result or not
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|null
      */
     protected function executeQuery($query, $first)
@@ -246,9 +246,9 @@ abstract class Repository implements RepositoryInterface
      * Magic finder resolution.
      * Dynamic queries are caught by the __call magic method and parsed here.
      *
-     * @param  string $term       The specific type of getter
-     * @param  string $method     The name of the method called
-     * @param  array  $parameters The parameters passed to the method
+     * @param  string                                                                  $term       The specific type of getter
+     * @param  string                                                                  $method     The name of the method called
+     * @param  array                                                                   $parameters The parameters passed to the method
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|null
      */
     private function dynamicFind(array $method, $parameters)
