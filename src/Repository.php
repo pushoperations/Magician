@@ -1,6 +1,6 @@
-<?php namespace Magician;
+<?php namespace Push\Magician;
 
-use Magician\Utils\Parser;
+use Push\Magician\Utils\Parser;
 use Cache;
 
 abstract class Repository implements RepositoryInterface
