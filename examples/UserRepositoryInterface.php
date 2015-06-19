@@ -1,6 +1,6 @@
 <?php namespace App\Repositories;
 
-use Magician\RepositoryInterface;
+use Push\Magician\RepositoryInterface;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {

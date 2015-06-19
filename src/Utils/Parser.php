@@ -1,4 +1,4 @@
-<?php namespace Magician\Utils;
+<?php namespace Push\Magician\Utils;
 
 class Parser
 {

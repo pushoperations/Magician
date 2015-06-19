@@ -1,4 +1,4 @@
-<?php namespace Magician;
+<?php namespace Push\Magician;
 
 interface RepositoryInterface
 {

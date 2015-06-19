@@ -1,7 +1,7 @@
 <?php namespace App\Repositories;
 
 use Models\User;
-use Magician\Repository;
+use Push\Magician\Repository;
 
 class UserRepository extends Repository implements UserRepositoryInterface
 {
