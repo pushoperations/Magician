@@ -1,7 +1,8 @@
 <?php namespace Push\Magician;
 
-use Push\Magician\Utils\Parser;
 use Cache;
+use Illuminate\Database\Query\Builder;
+use Push\Magician\Utils\Parser;
 
 abstract class Repository implements RepositoryInterface
 {
@@ -173,11 +174,12 @@ abstract class Repository implements RepositoryInterface
     public function count()
     {
         $tag = $this->cacheTag ?: $this->untagged;
+        $key = $this->getQueryKey($this->getQueryBuilder()->getQuery(), 'count');
 
-        return $this->getQueryBuilder()
-            ->cacheTags(['repositories', 'count', $tag])
-            ->remember($this->cacheDuration)
-            ->count();
+        return Cache::tags(['repositories', 'count', $tag])
+            ->remember($key, $this->cacheDuration, function () {
+                return $this->getQueryBuilder()->count();
+            });
     }
 
     /**
@@ -234,12 +236,27 @@ abstract class Repository implements RepositoryInterface
     {
         $tag = $this->cacheTag ?: $this->untagged;
 
-        if ($first) {
-            return $query->cacheTags(['repositories', $tag])->remember($this->cacheDuration)->first();
-        } else {
-            return $query->cacheTags(['repositories', $tag])->remember($this->cacheDuration)->get();
-        }
+        $builder = $query->getQuery();
+        $key = $this->getQueryKey($builder, $first);
 
+        if ($first) {
+            return Cache::tags(['repositories', $tag])
+                ->remember($key, $this->cacheDuration, function () use ($query) {
+                    return $query->first();
+                });
+        } else {
+            return Cache::tags(['repositories', $tag])
+                ->remember($key, $this->cacheDuration, function () use ($query) {
+                    return $query->get();
+                });
+        }
+    }
+
+    protected function getQueryKey(Builder $builder, $other = null)
+    {
+        $name = $builder->getConnection()->getName();
+
+        return md5($name.$builder->toSql().serialize($builder->getBindings()).$other);
     }
 
     /**
@@ -264,7 +281,7 @@ abstract class Repository implements RepositoryInterface
         $qualifier = isset($parameters[0]) ? $parameters[0] : null;
 
         if (!$qualifier) {
-            return null;
+            return;
         }
 
         // The order to list results
