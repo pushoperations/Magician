@@ -11,7 +11,7 @@
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/3f2b755a-6ca6-4a85-9b07-43e08ce68310/big.png)](https://insight.sensiolabs.com/projects/3f2b755a-6ca6-4a85-9b07-43e08ce68310)
 
-A library for implementing repositories with magic finders for the Eloquent ORM.
+A library for implementing repositories with magic finders and caching for the Eloquent ORM.
 
 ## Contents
 
@@ -29,7 +29,7 @@ Update your project's composer.json file to include Magic Repository:
 ```json
 {
     "require": {
-        "pushoperations/magician": "dev-master"
+        "pushoperations/magician": "0.9.*"
     }
 }
 ```
